@@ -1,0 +1,16 @@
+.Cities {
+  display: flex;
+  flex-direction: column;
+}
+
+.Cities__title {
+  text-align: center;
+  font-size: 3.5rem;
+  padding: 1rem 0;
+}
+
+.Cities__error-message {
+  font-size: 1rem;
+  text-align: center;
+  color: white;
+}

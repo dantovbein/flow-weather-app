@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://localhost:5053/cities -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewort" content="width-device-width, initial-scale-1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <link rel="shortcut icon" href="http://localhost:5053/favicon.png">
+    <title>Flow Weather App - Dan Tovbein</title>
+  <style>.Spinner {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  margin: auto;
+  background-image: url(images/7266036c9f3383d21730484150602f01.gif);
+  background-size: 300%;
+  background-position: center; }
+</style><style>.Overlay {
+  width: 100%;
+  height: 100%;
+  background-color: #202020b8;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0; }
+
+.Overlay__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+
+.Overlay__message {
+  font-family: "Lato-Light";
+  color: #202020;
+  margin-top: 1rem; }
+</style><style>.City {
+  display: flex;
+  align-items: center;
+  margin: 0 0 1rem 0;
+  background-color: white;
+  color: #202020; }
+
+.City__title {
+  display: flex;
+  font-size: 1.5rem;
+  text-align: center; }
+
+.WeatherDays {
+  display: flex; }
+
+.City:first-child {
+  margin-top: 1rem; }
+</style><style>.Map {
+  display: flex;
+  height: 100%; }
+</style><style>.LocationWeather {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 18rem; }
+
+.LocationWeather__data {
+  width: 40%;
+  padding: 1rem 0 0 2rem; }
+
+.LocationWeather__map {
+  width: 100%;
+  height: 100%; }
+
+.LocationWeather__text {
+  font-size: 1.3rem;
+  margin: .1rem 0; }
+
+.LocationWeather__temperature {
+  padding: 1rem 0; }
+  .LocationWeather__temperature h2 {
+    margin-bottom: .25rem;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: #202020; }
+  .LocationWeather__temperature span {
+    display: block;
+    width: 100%;
+    margin-bottom: .15rem; }
+</style><style>.AddCity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 2rem 0;
+  padding: 0 2rem; }
+
+.AddCity__wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%; }
+
+.AddCity__input-search {
+  padding: 1rem 1rem 1rem 8rem;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  font-size: 1.4rem;
+  font-family: "Lato-Light";
+  text-transform: uppercase;
+  text-align: center; }
+
+.AddCity__add-button {
+  display: inline-flex;
+  padding: 1rem;
+  color: white;
+  background-color: #57dfb7;
+  font-family: "Lato-Regular";
+  text-transform: uppercase;
+  cursor: pointer; }
+
+.AddCity__error-message {
+  color: #e6404b;
+  padding: 1rem 0; }
+</style><style>.Cities {
+  display: flex;
+  flex-direction: column; }
+
+.Cities__title {
+  text-align: center;
+  font-size: 3.5rem;
+  padding: 1rem 0; }
+
+.Cities__error-message {
+  font-size: 1rem;
+  text-align: center;
+  color: white; }
+</style><style>.CurrentLocation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #57dfb7;
+  color: white;
+  min-height: 30rem; }
+
+.CurrentLocation__forecast {
+  height: 12rem; }
+
+.CurrentLocation__error-message {
+  color: red; }
+</style><style>.Forecast {
+  display: flex;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  color: #202020;
+  background-color: white; }
+</style><style>.WeatherDaysList {
+  display: flex;
+  flex-direction: column; }
+</style><style>.WeatherDay {
+  display: flex;
+  flex-direction: row;
+  width: 100%; }
+  .WeatherDay span:nth-child(1) {
+    width: 20%; }
+  .WeatherDay span:nth-child(2) {
+    width: 10%; }
+  .WeatherDay span:nth-child(3) {
+    width: 10%; }
+  .WeatherDay span:nth-child(4) {
+    width: 10%; }
+  .WeatherDay span:nth-child(5) {
+    width: 10%; }
+  .WeatherDay span:nth-child(6) {
+    width: 10%; }
+</style><style>.App {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: center;
+  transition: width .25s ease; }
+
+@media screen and (max-width: 1000px) {
+  .App {
+    width: 100%;
+    padding: 2rem 1rem 1rem 1rem; } }
+</style><style>.Footer {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2.5rem 0;
+  background-color: #57dfb7;
+  color: #202020;
+  text-align: center; }
+  .Footer p {
+    width: 100%; }
+</style><style>@font-face {
+  font-family: "Lato-Regular";
+  src: local("Lato-Regular"), local("Lato-Regular"), url(images/2d36b1a925432bae7f3c53a340868c6e.ttf) format("truetype"); }
+
+@font-face {
+  font-family: "Lato-Bold";
+  src: local("Lato-Bold"), local("Lato-Bold"), url(images/85d339d916479f729938d2911b85bf1f.ttf) format("truetype"); }
+
+@font-face {
+  font-family: "Lato-Light";
+  src: local("Lato-Light"), local("Lato-Light"), url(images/2fe27d9d10cdfccb1baef28a45d5ba90.ttf) format("truetype"); }
+
+@font-face {
+  font-family: "Lato-Italic";
+  src: local("Lato-Italic"), local("Lato-Italic"), url(images/7582e823ef0d702969ea0cce9afb326d.ttf) format("truetype"); }
+
+@font-face {
+  font-family: "font-awesome";
+  src: local("font-awesome"), local("font-awesome"), url(images/706450d7bba6374ca02fe167d86685cb.ttf) format("truetype"); }
+
+@font-face {
+  font-family: "owfont-regular";
+  src: local("owfont-regular"), local("owfont-regular"), url(images/3d73387c2a1e21f207a8357724f536ba.ttf) format("truetype"); }
+
+.owf {
+  display: inline-block;
+  font: normal normal normal 14px/1 owfont;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0); }
+
+.owf-lg {
+  font-size: 1.33333333em;
+  line-height: 0.75em;
+  vertical-align: -15%; }
+
+.owf-2x {
+  font-size: 2em; }
+
+.owf-3x {
+  font-size: 3em; }
+
+.owf-4x {
+  font-size: 4em; }
+
+.owf-5x {
+  font-size: 5em; }
+
+.owf-fw {
+  width: 1.28571429em;
+  text-align: center; }
+
+.owf-ul {
+  padding-left: 0;
+  margin-left: 2.14285714em;
+  list-style-type: none; }
+
+.owf-ul > li {
+  position: relative; }
+
+.owf-li {
+  position: absolute;
+  left: -2.14285714em;
+  width: 2.14285714em;
+  top: 0.14285714em;
+  text-align: center; }
+
+.owf-li.owf-lg {
+  left: -1.85714286em; }
+
+.owf-border {
+  padding: .2em .25em .15em;
+  border: solid 0.08em #eeeeee;
+  border-radius: .1em; }
+
+.owf-pull-right {
+  float: right; }
+
+.owf-pull-left {
+  float: left; }
+
+.owf.owf-pull-left {
+  margin-right: .3em; }
+
+.owf.owf-pull-right {
+  margin-left: .3em; }
+
+.owf-200:before,
+.owf-200-d:before,
+.owf-200-n:before {
+  content: "\EB28"; }
+
+/* thunderstorm with rain */
+.owf-201:before,
+.owf-201-d:before,
+.owf-201-n:before {
+  content: "\EB29"; }
+
+/* thunderstorm with heavy rain */
+.owf-202:before,
+.owf-202-d:before,
+.owf-202-n:before {
+  content: "\EB2A"; }
+
+/*  light thunderstorm  */
+.owf-210:before,
+.owf-210-d:before,
+.owf-210-n:before {
+  content: "\EB32"; }
+
+/*  thunderstorm  */
+.owf-211:before,
+.owf-211-d:before,
+.owf-211-n:before {
+  content: "\EB33"; }
+
+/*   heavy thunderstorm   */
+.owf-212:before,
+.owf-212-d:before,
+.owf-212-n:before {
+  content: "\EB34"; }
+
+/*   ragged thunderstorm   */
+.owf-221:before,
+.owf-221-d:before,
+.owf-221-n:before {
+  content: "\EB3D"; }
+
+/*  thunderstorm with light drizzle    */
+.owf-230:before,
+.owf-230-d:before,
+.owf-230-n:before {
+  content: "\EB46"; }
+
+/*  thunderstorm with drizzle     */
+.owf-231:before,
+.owf-231-d:before,
+.owf-231-n:before {
+  content: "\EB47"; }
+
+/* thunderstorm with heavy drizzle     */
+.owf-232:before,
+.owf-232-d:before,
+.owf-232-n:before {
+  content: "\EB48"; }
+
+/*   Drizzle - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/*  light intensity drizzle */
+.owf-300:before,
+.owf-300-d:before,
+.owf-300-n:before {
+  content: "\EB8C"; }
+
+/*  drizzle */
+.owf-301:before,
+.owf-301-d:before,
+.owf-301-n:before {
+  content: "\EB8D"; }
+
+/*  heavy intensity drizzle  */
+.owf-302:before,
+.owf-302-d:before,
+.owf-302-n:before {
+  content: "\EB8E"; }
+
+/*   light intensity drizzle rain  */
+.owf-310:before,
+.owf-310-d:before,
+.owf-310-n:before {
+  content: "\EB96"; }
+
+/*  drizzle rain  */
+.owf-311:before,
+.owf-311-d:before,
+.owf-311-n:before {
+  content: "\EB97"; }
+
+/* heavy intensity drizzle rain */
+.owf-312:before,
+.owf-312-d:before,
+.owf-312-n:before {
+  content: "\EB98"; }
+
+/* shower rain and drizzle  */
+.owf-313:before,
+.owf-313-d:before,
+.owf-313-n:before {
+  content: "\EB99"; }
+
+/* heavy shower rain and drizzle*/
+.owf-314:before,
+.owf-314-d:before,
+.owf-314-n:before {
+  content: "\EB9A"; }
+
+/* shower drizzle */
+.owf-321:before,
+.owf-321-d:before,
+.owf-321-n:before {
+  content: "\EBA1"; }
+
+/*   Rain - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/* light rain  */
+.owf-500:before,
+.owf-500-d:before,
+.owf-500-n:before {
+  content: "\EC54"; }
+
+/* moderate rain  */
+.owf-501:before,
+.owf-501-d:before,
+.owf-501-n:before {
+  content: "\EC55"; }
+
+/* heavy intensity rain  */
+.owf-502:before,
+.owf-502-d:before,
+.owf-502-n:before {
+  content: "\EC56"; }
+
+/* very heavy rain   */
+.owf-503:before,
+.owf-503-d:before,
+.owf-503-n:before {
+  content: "\EC57"; }
+
+/* extreme rain    */
+.owf-504:before,
+.owf-504-d:before,
+.owf-504-n:before {
+  content: "\EC58"; }
+
+/* freezing rain    */
+.owf-511:before,
+.owf-511-d:before,
+.owf-511-n:before {
+  content: "\EC5F"; }
+
+/*  light intensity shower rain    */
+.owf-520:before,
+.owf-520-d:before,
+.owf-520-n:before {
+  content: "\EC68"; }
+
+/* shower rain  */
+.owf-521:before,
+.owf-521-d:before,
+.owf-521-n:before {
+  content: "\EC69"; }
+
+/*  heavy intensity shower rain  */
+.owf-522:before,
+.owf-522-d:before,
+.owf-522-n:before {
+  content: "\EC6A"; }
+
+/* ragged shower rain  */
+.owf-531:before,
+.owf-531-d:before,
+.owf-531-n:before {
+  content: "\EC73"; }
+
+/*   Snow - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/* light snow  */
+.owf-600:before,
+.owf-600-d:before,
+.owf-600-n:before {
+  content: "\ECB8"; }
+
+/*  snow  */
+.owf-601:before,
+.owf-601-d:before,
+.owf-601-n:before {
+  content: "\ECB9"; }
+
+/*   heavy snow   */
+.owf-602:before,
+.owf-602-d:before,
+.owf-602-n:before {
+  content: "\ECBA"; }
+
+/*  sleet  */
+.owf-611:before,
+.owf-611-d:before,
+.owf-611-n:before {
+  content: "\ECC3"; }
+
+/*   shower sleet */
+.owf-612:before,
+.owf-612-d:before,
+.owf-612-n:before {
+  content: "\ECC4"; }
+
+/* light rain and snow */
+.owf-615:before,
+.owf-615-d:before,
+.owf-615-n:before {
+  content: "\ECC7"; }
+
+/* rain and snow  */
+.owf-616:before,
+.owf-616-d:before,
+.owf-616-n:before {
+  content: "\ECC8"; }
+
+/* light shower snow  */
+.owf-620:before,
+.owf-620-d:before,
+.owf-620-n:before {
+  content: "\ECCC"; }
+
+/* shower snow  */
+.owf-621:before,
+.owf-621-d:before,
+.owf-621-n:before {
+  content: "\ECCD"; }
+
+/* heavy shower snow  */
+.owf-622:before,
+.owf-622-d:before,
+.owf-622-n:before {
+  content: "\ECCE"; }
+
+/*   Atmosphere - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/* mist */
+.owf-701:before,
+.owf-701-d:before,
+.owf-701-n:before {
+  content: "\ED1D"; }
+
+/* smoke */
+.owf-711:before,
+.owf-711-d:before,
+.owf-711-n:before {
+  content: "\ED27"; }
+
+/* haze */
+.owf-721:before,
+.owf-721-d:before,
+.owf-721-n:before {
+  content: "\ED31"; }
+
+/* Sand/Dust Whirls */
+.owf-731:before,
+.owf-731-d:before,
+.owf-731-n:before {
+  content: "\ED3B"; }
+
+/* Fog */
+.owf-741:before,
+.owf-741-d:before,
+.owf-741-n:before {
+  content: "\ED45"; }
+
+/* sand */
+.owf-751:before,
+.owf-751-d:before,
+.owf-751-n:before {
+  content: "\ED4F"; }
+
+/* dust */
+.owf-761:before,
+.owf-761-d:before,
+.owf-761-n:before {
+  content: "\ED59"; }
+
+/*  VOLCANIC ASH  */
+.owf-762:before,
+.owf-762-d:before,
+.owf-762-n:before {
+  content: "\ED5A"; }
+
+/* SQUALLS */
+.owf-771:before,
+.owf-771-d:before,
+.owf-771-n:before {
+  content: "\ED63"; }
+
+/* TORNADO */
+.owf-781:before,
+.owf-781-d:before,
+.owf-781-n:before {
+  content: "\ED6D"; }
+
+/*   Clouds - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/*  sky is clear  */
+/*  Calm  */
+.owf-800:before,
+.owf-800-d:before,
+.owf-951:before,
+.owf-951-d:before {
+  content: "\ED80"; }
+
+.owf-800-n:before,
+.owf-951-n:before {
+  content: "\F168"; }
+
+/*  few clouds   */
+.owf-801:before,
+.owf-801-d:before {
+  content: "\ED81"; }
+
+.owf-801-n:before {
+  content: "\F169"; }
+
+/* scattered clouds */
+.owf-802:before,
+.owf-802-d:before {
+  content: "\ED82"; }
+
+.owf-802-n:before {
+  content: "\F16A"; }
+
+/* broken clouds  */
+.owf-803:before,
+.owf-803-d:before,
+.owf-803-n:before {
+  content: "\ED83"; }
+
+/* overcast clouds  */
+.owf-804:before,
+.owf-804-d:before,
+.owf-804-n:before {
+  content: "\ED84"; }
+
+/*   Extreme - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/* tornado  */
+.owf-900:before,
+.owf-900-d:before,
+.owf-900-n:before {
+  content: "\EDE4"; }
+
+/*  tropical storm  */
+.owf-901:before,
+.owf-901-d:before,
+.owf-901-n:before {
+  content: "\EDE5"; }
+
+/* hurricane */
+.owf-902:before,
+.owf-902-d:before,
+.owf-902-n:before {
+  content: "\EDE6"; }
+
+/* cold */
+.owf-903:before,
+.owf-903-d:before,
+.owf-903-n:before {
+  content: "\EDE7"; }
+
+/* hot */
+.owf-904:before,
+.owf-904-d:before,
+.owf-904-n:before {
+  content: "\EDE8"; }
+
+/* windy */
+.owf-905:before,
+.owf-905-d:before,
+.owf-905-n:before {
+  content: "\EDE9"; }
+
+/* hail */
+.owf-906:before,
+.owf-906-d:before,
+.owf-906-n:before {
+  content: "\EDEA"; }
+
+/*   Additional - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+/* Setting */
+.owf-950:before,
+.owf-950-d:before,
+.owf-950-n:before {
+  content: "\EE16"; }
+
+/*  Light breeze  */
+.owf-952:before,
+.owf-952-d:before,
+.owf-952-n:before {
+  content: "\EE18"; }
+
+/*  Gentle Breeze  */
+.owf-953:before,
+.owf-953-d:before,
+.owf-953-n:before {
+  content: "\EE19"; }
+
+/*  Moderate breeze  */
+.owf-954:before,
+.owf-954-d:before,
+.owf-954-n:before {
+  content: "\EE1A"; }
+
+/* Fresh Breeze  */
+.owf-955:before,
+.owf-955-d:before,
+.owf-955-n:before {
+  content: "\EE1B"; }
+
+/* Strong  Breeze  */
+.owf-956:before,
+.owf-956-d:before,
+.owf-956-n:before {
+  content: "\EE1C"; }
+
+/* High wind, near gale  */
+.owf-957:before,
+.owf-957-d:before,
+.owf-957-n:before {
+  content: "\EE1D"; }
+
+/* Gale */
+.owf-958:before,
+.owf-958-d:before,
+.owf-958-n:before {
+  content: "\EE1E"; }
+
+/*  Severe Gale  */
+.owf-959:before,
+.owf-959-d:before,
+.owf-959-n:before {
+  content: "\EE1F"; }
+
+/* Storm */
+.owf-960:before,
+.owf-960-d:before,
+.owf-960-n:before {
+  content: "\EE20"; }
+
+/*  Violent Storm  */
+.owf-961:before,
+.owf-961-d:before,
+.owf-961-n:before {
+  content: "\EE21"; }
+
+/* Hurricane */
+.owf-962:before,
+.owf-962-d:before,
+.owf-962-n:before {
+  content: "\EE22"; }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  font-family: "Lato-Regular";
+  background-color: #202020;
+  color: #57dfb7;
+  height: 100%; }
+
+ul {
+  list-style: none;
+  color: #57dfb7; }
+
+a {
+  text-decoration: none;
+  color: #202020;
+  font-family: "Lato-Bold"; }
+
+button {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-size: 100%;
+  user-select: none; }
+
+input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-size: 100%; }
+
+#root {
+  display: flex;
+  justify-content: center; }
+</style></head>
+  <body>
+    <div id="root"><main class="App"><div class="CurrentLocation"><div><div class="LocationWeather"><div class="LocationWeather__data"><h1>Villa Crespo, AR</h1><p class="LocationWeather__text">Latitude: -58.44</p><p class="LocationWeather__text">longitude: -34.6</p><div class="LocationWeather__temperature"><h2>nubes dispersas</h2><span>Temperatura: 25°</span><span>Mínima: 23°</span><span>Máxima: 27°</span><span>Humedad: 83 %</span><span>Presión: 1013 hPa</span></div></div><div class="LocationWeather__map"><div class="Map mapboxgl-map"><div class="mapboxgl-canary" style="visibility: hidden;"></div><div class="mapboxgl-canvas-container mapboxgl-interactive mapboxgl-touch-drag-pan mapboxgl-touch-zoom-rotate"><canvas class="mapboxgl-canvas" tabindex="0" aria-label="Map" width="1022" height="288" style="position: absolute; width: 1022px; height: 288px;"></canvas></div><div class="mapboxgl-control-container"><div class="mapboxgl-ctrl-top-left"></div><div class="mapboxgl-ctrl-top-right"></div><div class="mapboxgl-ctrl-bottom-left"><div class="mapboxgl-ctrl" style="display: block;"><a class="mapboxgl-ctrl-logo mapboxgl-compact" target="_blank" rel="noopener nofollow" href="https://www.mapbox.com/" aria-label="Mapbox logo"></a></div></div><div class="mapboxgl-ctrl-bottom-right"><div class="mapboxgl-ctrl mapboxgl-ctrl-attrib mapboxgl-compact"><div class="mapboxgl-ctrl-attrib-inner"><a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a> <a class="mapbox-improve-map" href="https://apps.mapbox.com/feedback/?owner=mapbox&amp;id=streets-v11&amp;access_token=pk.eyJ1IjoiZGFudG92YmVpbiIsImEiOiJjazM4NW9tY3cwNGZ5M2lucmZnZm55cGJxIn0.0JyOUCDQhYCm1biOYurdhQ" target="_blank" rel="noopener nofollow">Improve this map</a></div></div></div></div></div></div></div></div><div class="CurrentLocation__forecast"><div class="Forecast"><h1></h1><ul class="WeatherDaysList"><div class="WeatherDay"><span>2019-11-21 15:00:00</span><span>272.35°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.35 %</span><span>Presión: 272.35 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-21 18:00:00</span><span>272.53°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.53 %</span><span>Presión: 272.53 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-21 21:00:00</span><span>271.87°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.87 %</span><span>Presión: 271.87 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-22 00:00:00</span><span>271.76°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.76 %</span><span>Presión: 271.76 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-22 03:00:00</span><span>272.06°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.06 %</span><span>Presión: 272.06 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-22 06:00:00</span><span>271.93°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.93 %</span><span>Presión: 271.93 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-22 09:00:00</span><span>272.1°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.1 %</span><span>Presión: 272.1 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-22 12:00:00</span><span>272.44°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.44 %</span><span>Presión: 272.44 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-22 15:00:00</span><span>272.58°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.58 %</span><span>Presión: 272.58 hPa</span><span>nubes rotas</span></div><div class="WeatherDay"><span>2019-11-22 18:00:00</span><span>272.72°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.72 %</span><span>Presión: 272.72 hPa</span><span>nubes rotas</span></div><div class="WeatherDay"><span>2019-11-22 21:00:00</span><span>272.51°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.51 %</span><span>Presión: 272.51 hPa</span><span>nubes dispersas</span></div><div class="WeatherDay"><span>2019-11-23 00:00:00</span><span>272.31°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.31 %</span><span>Presión: 272.31 hPa</span><span>nubes dispersas</span></div><div class="WeatherDay"><span>2019-11-23 03:00:00</span><span>272.46°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.46 %</span><span>Presión: 272.46 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-23 06:00:00</span><span>272.32°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.32 %</span><span>Presión: 272.32 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-23 09:00:00</span><span>272.38°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.38 %</span><span>Presión: 272.38 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-23 12:00:00</span><span>272.37°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.37 %</span><span>Presión: 272.37 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-23 15:00:00</span><span>272.43°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.43 %</span><span>Presión: 272.43 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-23 18:00:00</span><span>272.47°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.47 %</span><span>Presión: 272.47 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-23 21:00:00</span><span>272.37°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.37 %</span><span>Presión: 272.37 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 00:00:00</span><span>272.1°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.1 %</span><span>Presión: 272.1 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 03:00:00</span><span>271.97°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.97 %</span><span>Presión: 271.97 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 06:00:00</span><span>272.06°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.06 %</span><span>Presión: 272.06 hPa</span><span>nevada ligera</span></div><div class="WeatherDay"><span>2019-11-24 09:00:00</span><span>272.24°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.24 %</span><span>Presión: 272.24 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 12:00:00</span><span>272.25°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.25 %</span><span>Presión: 272.25 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 15:00:00</span><span>272.52°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.52 %</span><span>Presión: 272.52 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 18:00:00</span><span>272.6°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.6 %</span><span>Presión: 272.6 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-24 21:00:00</span><span>272.48°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.48 %</span><span>Presión: 272.48 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-25 00:00:00</span><span>272.22°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.22 %</span><span>Presión: 272.22 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-25 03:00:00</span><span>272.13°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.13 %</span><span>Presión: 272.13 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-25 06:00:00</span><span>272.07°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.07 %</span><span>Presión: 272.07 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-25 09:00:00</span><span>272.3°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.3 %</span><span>Presión: 272.3 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-25 12:00:00</span><span>272.3°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.3 %</span><span>Presión: 272.3 hPa</span><span>nubes</span></div><div class="WeatherDay"><span>2019-11-25 15:00:00</span><span>272.23°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.23 %</span><span>Presión: 272.23 hPa</span><span>nubes rotas</span></div><div class="WeatherDay"><span>2019-11-25 18:00:00</span><span>272.35°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.35 %</span><span>Presión: 272.35 hPa</span><span>nubes dispersas</span></div><div class="WeatherDay"><span>2019-11-25 21:00:00</span><span>272.06°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.06 %</span><span>Presión: 272.06 hPa</span><span>cielo claro</span></div><div class="WeatherDay"><span>2019-11-26 00:00:00</span><span>271.55°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.55 %</span><span>Presión: 271.55 hPa</span><span>cielo claro</span></div><div class="WeatherDay"><span>2019-11-26 03:00:00</span><span>271.69°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.69 %</span><span>Presión: 271.69 hPa</span><span>cielo claro</span></div><div class="WeatherDay"><span>2019-11-26 06:00:00</span><span>271.53°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.53 %</span><span>Presión: 271.53 hPa</span><span>cielo claro</span></div><div class="WeatherDay"><span>2019-11-26 09:00:00</span><span>271.87°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 271.87 %</span><span>Presión: 271.87 hPa</span><span>cielo claro</span></div><div class="WeatherDay"><span>2019-11-26 12:00:00</span><span>272.29°</span><span>Mínima: °</span><span>Máxima: °</span><span>Humedad: 272.29 %</span><span>Presión: 272.29 hPa</span><span>cielo claro</span></div></ul></div></div></div><div class="Cities"><div class="AddCity"><div class="AddCity__wrapper"><input class="AddCity__input-search" type="text" placeholder="Agregar nueva ciudad" value=""><button class="AddCity__add-button" disabled="">Agregar</button></div></div><h1 class="Cities__title">Ciudades</h1><span class="Cities__error-message">No hay ciudades agregadas</span></div><footer class="Footer"><p>Sitio experimental desarrollado por <a href="https://github.com/dantovbein">@dan.tovbein</a></p></footer></main></div>
+  <script type="text/javascript" src="./Flow Weather App - Dan Tovbein_files/a993be211475e2101c1amain.js"></script>
+</body></html>

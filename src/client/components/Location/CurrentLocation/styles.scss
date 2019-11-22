@@ -1,0 +1,14 @@
+@import '../../../sass/variables';
+
+.CurrentLocation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $flow-color-green;
+  color: white;
+  min-height: 30rem;
+}
+
+.CurrentLocation__error-message {
+  color: red;
+}

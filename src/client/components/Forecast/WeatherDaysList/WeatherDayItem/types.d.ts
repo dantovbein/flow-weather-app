@@ -1,0 +1,3 @@
+interface IWeatherDayItemProps {
+  day: WeatherPeriodType
+}

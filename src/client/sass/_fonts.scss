@@ -1,0 +1,39 @@
+@import "./variables";
+
+$fonts-url: './media/fonts/';
+
+@font-face {
+  font-family: $lato-regular;
+  src: local($lato-regular), local($lato-regular),
+  url($fonts-url + $lato-regular + '.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: $lato-bold;
+  src: local($lato-bold), local($lato-bold),
+  url($fonts-url + $lato-bold + '.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: $lato-light;
+  src: local($lato-light), local($lato-light),
+  url($fonts-url + $lato-light + '.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: $lato-italic;
+  src: local($lato-italic), local($lato-italic),
+  url($fonts-url + $lato-italic + '.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: $font-awesome;
+  src: local($font-awesome), local($font-awesome),
+  url($fonts-url + $font-awesome + '.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: $owfont-regular;
+  src: local($owfont-regular), local($owfont-regular),
+  url($fonts-url + $owfont-regular + '.ttf') format('truetype');
+}

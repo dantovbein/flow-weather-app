@@ -1,0 +1,3 @@
+interface IXButtonProps {
+  onClickHandler: () => void
+}

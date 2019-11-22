@@ -1,0 +1,42 @@
+@import '../../../sass/variables';
+
+.LocationWeather {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 18rem;
+}
+
+.LocationWeather__data {
+  width: 40%;
+  padding: 1rem 0 0 2rem;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.LocationWeather__map {
+  width: 100%;
+  height: 100%;
+}
+
+.LocationWeather__text {
+  font-size: 1.3rem;
+  margin: .1rem 0;
+}
+
+.LocationWeather__temperature {
+  padding: 1rem 0;
+  h2 {
+    margin-bottom: .25rem;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: $flow-color-grey;
+  }
+  span {
+    display: block;
+    width: 100%;
+    margin-bottom: .15rem;
+  }
+}

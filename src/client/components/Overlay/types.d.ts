@@ -1,0 +1,3 @@
+interface IOverlayProps {
+  message?: string,
+}

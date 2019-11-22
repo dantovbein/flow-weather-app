@@ -1,0 +1,3 @@
+interface IAddCityProps {
+  allowAdd: boolean
+}

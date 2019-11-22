@@ -1,0 +1,6 @@
+export enum Actions {
+  FETCHING = 'FETCHING',
+  FETCHED = 'FETCHED',
+  ADD_CITY = 'ADD_CITY',
+  DELETE_CITY = 'DELETE_CITY',
+}

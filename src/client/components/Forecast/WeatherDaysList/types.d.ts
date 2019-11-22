@@ -1,0 +1,3 @@
+interface IWeatherDaysListProps {
+  days: WeatherPeriodType[]
+}

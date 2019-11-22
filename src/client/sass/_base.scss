@@ -1,0 +1,46 @@
+@import './variables';
+@import './fonts';
+@import './mixins';
+@import './icons';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  font-family: $lato-regular;
+  background-color: $flow-color-grey;
+  color: $flow-color-green;
+  height: 100%;
+}
+
+ul {
+  list-style: none;
+  color: $flow-color-green;
+}
+
+a {
+  text-decoration: none;
+  color: $flow-color-grey;
+  font-family: $lato-bold;
+}
+
+button {
+  @include reset;
+  user-select: none;
+}
+
+input {
+  @include reset;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+}

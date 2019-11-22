@@ -1,0 +1,31 @@
+@import '../../../sass/variables';
+
+.WeatherDaysList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 5%;
+}
+
+.WeatherDaysList__theader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: center;
+  font-family: $lato-bold;
+  color: $flow-color-grey;
+  padding: .5rem 0;
+
+  &:last-child {
+    width: 25%;
+    flex: 1;
+    text-align: left;
+  }
+}
+
+.WeatherDaysList__error-message {
+  padding: 2rem 0;
+  width: 100%;
+  color: $flow-color-error;
+  text-align: center;
+}
